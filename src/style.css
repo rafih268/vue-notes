@@ -1,1 +1,7 @@
 @import "tailwindcss";
+
+@layer components {
+  .button {
+    @apply bg-yellow-500 text-gray-900 font-bold px-4 py-2 rounded cursor-pointer;
+  }
+}
