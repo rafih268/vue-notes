@@ -12,7 +12,7 @@ const activeNote = ref(null);
 const inputTitle = ref('');
 const inputContent = ref('');
 
-// Creates a note
+// Create note
 function createNote() {
   const id = Math.random().toString(36).substring(2,9);
   notesArray.value.push({
@@ -20,9 +20,10 @@ function createNote() {
     title: 'Untitled',
     content: ''
   });
+  setActiveNote(id);
 }
 
-// Sets note currently being used to be active
+// Sets note currently being used to active
 function setActiveNote(id) {
   activeNote.value = id;
   let note = notesArray.value.find((note) => note.id === id);
@@ -35,12 +36,24 @@ function setActiveNote(id) {
   }, 0);
 }
 
-// Update Note
+// Update note
 function updateNote() {
   let noteIndex = notesArray.value.findIndex((note) => note.id === activeNote.value);
 
   notesArray.value[noteIndex].title = inputTitle.value;
   notesArray.value[noteIndex].content = inputContent.value;
+}
+
+// Delete note
+function deleteNote({id, evt}) {
+  evt.stopPropagation();
+
+  let noteIndex = notesArray.value.findIndex((note) => note.id === id);
+  notesArray.value.splice(noteIndex, 1);
+
+  activeNote.value = null;
+  inputTitle = '';
+  inputContent = '';
 }
 
 </script>
@@ -52,6 +65,7 @@ function updateNote() {
       :notesArray="notesArray"
       @new-note="createNote"
       @set-active-note="setActiveNote"
+      @delete-note="deleteNote"
     />
     <main class="flex-1">
       <div v-if="activeNote"
