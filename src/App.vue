@@ -35,6 +35,14 @@ function setActiveNote(id) {
   }, 0);
 }
 
+// Update Note
+function updateNote() {
+  let noteIndex = notesArray.value.findIndex((note) => note.id === activeNote.value);
+
+  notesArray.value[noteIndex].title = inputTitle.value;
+  notesArray.value[noteIndex].content = inputContent.value;
+}
+
 </script>
 
 <template>
@@ -50,11 +58,12 @@ function setActiveNote(id) {
         class="px-4 py-8 flex flex-col h-full"
         >
         <input
-          v-model="inputTitle" 
+          v-model="inputTitle"
+          @input="updateNote" 
           type="text" 
           class="block w-full text-3xl pb-2 font-bold border-b-2 border-gray-600 focus:border-yellow-200 outline-none transition-colors duration-200"
         >
-        <textarea v-model="inputContent" class="block w-full h-full mt-4 text-lg outline-none flex-1"></textarea>
+        <textarea v-model="inputContent" @input="updateNote" class="block w-full h-full mt-4 text-lg outline-none flex-1"></textarea>
       </div>
     </main>
   </div>
