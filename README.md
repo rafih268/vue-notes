@@ -1,5 +1,33 @@
-# Vue 3 + Vite
+# Vue Jotter
+> Note taking application built with Vue js and Tailwind CSS.
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+## Table of Contents <!-- omit in toc -->
+- [Vue Jotter](#vue-jotter)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [Contributing](#contributing)
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+## Installation
+1. Clone the repository:
+```bash
+git clone https://github.com/rafih268/vue-notes.git
+```
+
+2. Install dependencies:
+Go to the root folder and run the following:
+```bash
+npm install
+```
+
+## Usage
+To run the project, use the following command:
+```
+
+## Contributing
+1. Fork the repository.
+2. Create a new branch: `git checkout -b feature-name`.
+3. Make your changes.
+4. Push your branch: `git push origin feature-name`.
+5. Create a pull request.
+4. Push your branch: `git push origin feature-name`.
+5. Create a pull request.
