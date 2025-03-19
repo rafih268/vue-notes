@@ -42,6 +42,8 @@ function setActiveNote(id) {
     <Sidebar
       :activeNote="activeNote"
       :notesArray="notesArray"
+      @new-note="createNote"
+      @set-active-note="setActiveNote"
     />
     <main class="flex-1">
       <div v-if="activeNote"
