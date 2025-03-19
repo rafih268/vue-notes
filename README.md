@@ -21,8 +21,9 @@ npm install
 
 ## Usage
 To run the project, use the following command:
+```bash
+npm run dev
 ```
-
 ## Contributing
 1. Fork the repository.
 2. Create a new branch: `git checkout -b feature-name`.
