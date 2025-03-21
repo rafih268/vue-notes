@@ -1,5 +1,6 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
 import Sidebar from './components/Sidebar.vue';
 
 // Array of notes created
@@ -11,6 +12,17 @@ const activeNote = ref(null);
 // Title and content of note
 const inputTitle = ref('');
 const inputContent = ref('');
+
+const API_URL = import.meta.env.VITE_API_URL
+
+onMounted(async () => {
+  try {
+    const response = await axios.get(API_URL);
+    notesArray.value = response.data;
+  } catch (error) {
+    console.error("Unable to fetch notes:", error)
+  }
+})
 
 // Create note
 function createNote() {
