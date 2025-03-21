@@ -13,26 +13,32 @@ const activeNote = ref(null);
 const inputTitle = ref('');
 const inputContent = ref('');
 
-const API_URL = import.meta.env.VITE_API_URL
+const API_URL = import.meta.env.VITE_API_URL;
 
 onMounted(async () => {
   try {
     const response = await axios.get(API_URL);
     notesArray.value = response.data;
   } catch (error) {
-    console.error("Unable to fetch notes:", error)
+    console.error("Unable to fetch notes:", error);
   }
 })
 
 // Create note
-function createNote() {
-  const id = Math.random().toString(36).substring(2,9);
-  notesArray.value.push({
-    id,
+async function createNote() {
+  const newNote = {
+    id: Math.random().toString(36).substring(2,9),
     title: 'Untitled',
     content: ''
-  });
-  setActiveNote(id);
+  };
+
+  try {
+    const response = await axios.post(API_URL, newNote);
+    notesArray.value.push(response.data);
+    setActiveNote(response.data.id);
+  } catch (error) {
+    console.error("Unable to create new note:", error);
+  }
 }
 
 // Sets note currently being used to active
