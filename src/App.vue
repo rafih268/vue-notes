@@ -74,15 +74,18 @@ async function updateNote() {
 }
 
 // Delete note
-function deleteNote({id, evt}) {
+async function deleteNote({id, evt}) {
   evt.stopPropagation();
 
-  let noteIndex = notesArray.value.findIndex((note) => note.id === id);
-  notesArray.value.splice(noteIndex, 1);
-
-  activeNote.value = null;
-  inputTitle = '';
-  inputContent = '';
+  try {
+    await axios.delete(`${API_URL}/${id}`);
+    notesArray.value = notesArray.value.filter((note) => note.id !== id);
+    activeNote.value = null;
+    inputTitle = '';
+    inputContent = '';
+  } catch (error) {
+    console.error("Unable to delete note:", error);
+  }
 }
 
 </script>
