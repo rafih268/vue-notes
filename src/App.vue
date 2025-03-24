@@ -33,9 +33,8 @@ async function createNote() {
   };
 
   try {
-    const response = await axios.post(API_URL, newNote);
-    notesArray.value.push(response.data);
-    setActiveNote(response.data.id);
+    const { data } = await axios.post(API_URL, newNote);
+    notesArray.value = [...notesArray.value, data];
   } catch (error) {
     console.error("Unable to create new note:", error);
   }
@@ -55,11 +54,23 @@ function setActiveNote(id) {
 }
 
 // Update note
-function updateNote() {
-  let noteIndex = notesArray.value.findIndex((note) => note.id === activeNote.value);
+async function updateNote() {
+  let note = notesArray.value.find((note) => note.id === activeNote.value);
 
-  notesArray.value[noteIndex].title = inputTitle.value;
-  notesArray.value[noteIndex].content = inputContent.value;
+  if (!note) return;
+
+  try {
+    await axios.put(`${API_URL}/${note.id}`, {
+      ...note,
+      title: inputTitle.value,
+      content: inputContent.value
+    });
+
+    note.title = inputTitle.value;
+    note.content = inputContent.value;
+  } catch (error) {
+    console.error("Unable to update note:", error);
+  }
 }
 
 // Delete note
