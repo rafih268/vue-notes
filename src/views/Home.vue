@@ -1,5 +1,6 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
 import Sidebar from '../components/Sidebar.vue';
 
 // Array of notes created
@@ -8,9 +9,22 @@ const notesArray = ref([]);
 // Note currently being edited
 const activeNote = ref(null);
 
+// Ref values to check if any notes currently being added or editted
+const isAdding = ref(null);
+const isEditing = ref(null);
+
 // Title and content of note
 const inputTitle = ref('');
 const inputContent = ref('');
+
+onMounted(async () => {
+  try {
+    const response = await axios.get('http://localhost:5000/notes');
+    notesArray.value = response.data;
+  } catch (error) {
+    console.error('Unable to generate notes', error);
+  }
+});
 
 // Create note
 const createNote = () => {
@@ -21,7 +35,7 @@ const createNote = () => {
     content: ''
   });
   setActiveNote(id);
-}
+};
 
 // Sets note currently being used to active
 const setActiveNote = (id) => {
@@ -34,7 +48,7 @@ const setActiveNote = (id) => {
   setTimeout(() => {
     document.querySelector('input[type="text"]').focus();
   }, 0);
-}
+};
 
 // Update note
 const updateNote = () => {
@@ -42,7 +56,7 @@ const updateNote = () => {
 
   notesArray.value[noteIndex].title = inputTitle.value;
   notesArray.value[noteIndex].content = inputContent.value;
-}
+};
 
 // Delete note
 const deleteNote = ({id, evt}) => {
@@ -54,7 +68,7 @@ const deleteNote = ({id, evt}) => {
   activeNote.value = null;
   inputTitle.value = '';
   inputContent.value = '';
-}
+};
 
 </script>
 
