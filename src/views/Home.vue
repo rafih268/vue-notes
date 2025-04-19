@@ -9,41 +9,49 @@ const notesArray = ref([]);
 // Note currently being edited
 const activeNote = ref(null);
 
-// Ref values to check if any notes currently being added or editted
-const isAdding = ref(null);
-const isEditing = ref(null);
-
 // Title and content of note
 const inputTitle = ref('');
 const inputContent = ref('');
 
-onMounted(async () => {
+const getNotes = async () => {
   try {
     const response = await axios.get('http://localhost:5000/notes');
     notesArray.value = response.data;
   } catch (error) {
-    console.error('Unable to generate notes', error);
+    console.error('Unable to generate notes.', error);
   }
+}
+
+onMounted(async () => {
+  await getNotes();
 });
 
 // Create note
-const createNote = () => {
+const createNote = async () => {
   const id = Math.random().toString(36).substring(2,9);
-  notesArray.value.push({
-    id,
-    title: 'Untitled',
-    content: ''
-  });
-  setActiveNote(id);
+  
+  try {
+    await axios.post('http://localhost:5000/notes', {
+      id,
+      title: 'Untitled',
+      content: ''
+    });
+
+    await getNotes();
+    setActiveNote(id);
+  } catch (error) {
+    console.error('Unable to create new note.', error);
+  }
 };
 
 // Sets note currently being used to active
-const setActiveNote = (id) => {
+const setActiveNote = async (id) => {
   activeNote.value = id;
-  let note = notesArray.value.find((note) => note.id === id);
 
-  inputTitle.value = note.title;
-  inputContent.value = note.content;
+  let noteIndex = notesArray.value.findIndex(note => note.id === id);
+
+  inputTitle.value = notesArray.value[noteIndex].title;
+  inputContent.value = notesArray.value[noteIndex].content;
 
   setTimeout(() => {
     document.querySelector('input[type="text"]').focus();
@@ -52,7 +60,7 @@ const setActiveNote = (id) => {
 
 // Update note
 const updateNote = () => {
-  let noteIndex = notesArray.value.findIndex((note) => note.id === activeNote.value);
+  let noteIndex = notesArray.value.findIndex(note => note.id === activeNote.value);
 
   notesArray.value[noteIndex].title = inputTitle.value;
   notesArray.value[noteIndex].content = inputContent.value;
@@ -62,7 +70,7 @@ const updateNote = () => {
 const deleteNote = ({id, evt}) => {
   evt.stopPropagation();
 
-  let noteIndex = notesArray.value.findIndex((note) => note.id === id);
+  let noteIndex = notesArray.value.findIndex(note => note.id === id);
   notesArray.value.splice(noteIndex, 1);
 
   activeNote.value = null;
